@@ -1,0 +1,23 @@
+#!/bin/sh
+red='\033[0;31m'
+green='\033[0;32m'
+plain='\033[0m'
+
+echo "${green}Running pre-push hook..."
+
+### Check if some .only have been forgotten
+echo "Looking for .only in test files...${plain}"
+
+# find *.spec.js files and search .only in them
+results="$(find . -name '*.spec.js' ! -path './node_modules/*' | xargs grep --color=always -nE '(it|describe)\.only')"
+exit_code=$?
+
+if [[ $exit_code -eq 0 ]]; then
+    echo "$results"
+    exit 1
+fi
+echo "${green}Test files look ok, running them...${plain}"
+
+# Running tests
+npm t
+
