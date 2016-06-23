@@ -8,8 +8,8 @@ echo "${green}Running pre-push hook..."
 ### Check if some .only have been forgotten
 echo "Looking for .only in test files...${plain}"
 
-# find *.spec.js files and search .only in them
-results="$(find . -name '*.spec.js' ! -path './node_modules/*' | xargs grep --color=always -nE '(it|describe)\.only')"
+# find *.spec.js and *.serverSpec files and search .only in them
+results="$(find . \( -name '*.spec.js' -o -name '*.serverSpec.js' \) ! -path './node_modules/*' | xargs grep --color=always -nE '(it|describe)\.only')"
 exit_code=$?
 
 if [[ $exit_code -eq 0 ]]; then
